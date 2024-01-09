@@ -1,10 +1,12 @@
 import Spinner from "./Spinner.jsx";
 import styles from "./CityList.module.css";
 import CityItem from "./CityItem.jsx";
-import PropTypes from "prop-types";
 import Message from "./Message.jsx";
+import { useContext } from "react";
+import { CityContext } from "../contexts/CityContext.jsx";
 
-function CityList({ cities, isLoading }) {
+function CityList() {
+  const { cities, isLoading } = useContext(CityContext);
   if (isLoading) return <Spinner />;
 
   if (!cities.length)
@@ -19,10 +21,5 @@ function CityList({ cities, isLoading }) {
     </ul>
   );
 }
-
-CityList.propTypes = {
-  cities: PropTypes.array.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-};
 
 export default CityList;

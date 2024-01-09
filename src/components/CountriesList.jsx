@@ -1,28 +1,33 @@
 import Spinner from "./Spinner.jsx";
 import styles from "./CountryList.module.css";
-import CityItem from "./CityItem.jsx";
-import PropTypes from "prop-types";
 import Message from "./Message.jsx";
+import CountryItem from "./CountryItem.jsx";
+import { CityContext } from "../contexts/CityContext.jsx";
+import { useContext } from "react";
 
-function CountriesList({ cities, isLoading }) {
+function CountriesList() {
+  const { cities, isLoading } = useContext(CityContext);
+
   if (isLoading) return <Spinner />;
 
   if (!cities.length)
     return (
-      <Message message="Add your first city by clicking on a city on the map " />
+      <Message message="Add your first city by clicking on a coutry on the map " />
     );
+
+  const countries = cities.reduce((arr, city) => {
+    if (!arr.map((el) => el.country).includes(city.country))
+      return [...arr, { country: city.country, emoji: city.emoji }];
+    else return arr;
+  }, []);
+
   return (
-    <ul className={styles.cityList}>
-      {cities.map((city) => (
-        <CityItem city={city} key={city.id} />
+    <ul className={styles.countryList}>
+      {countries.map((country) => (
+        <CountryItem country={country} key={country.id} />
       ))}
     </ul>
   );
 }
-
-CountriesList.propTypes = {
-  cities: PropTypes.array.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-};
 
 export default CountriesList;
